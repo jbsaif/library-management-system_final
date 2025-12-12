@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-header bg-secondary text-white">
+        <h2 class="mb-0"><i class="bi bi-people-fill"></i> User Account Management</h2>
+    </div>
+    <div class="card-body">
+
+        <div th:if="${param.success}" class="alert alert-success" role="alert">
+            <span th:text="${param.success[0]}">User updated successfully!</span>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <span th:text="${param.error[0]}">An error occurred.</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped border">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Username (Email)</th>
+                    <th>Role</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}">1</td>
+                    <td th:text="${user.fullName}">John Doe</td>
+                    <td th:text="${user.username}">john.doe@example.com</td>
+
+                    <td th:text="${user.role}"
+                        th:classappend="${user.role == 'ROLE_ADMIN'} ? 'text-danger fw-bold' : ''">
+                        ROLE_USER
+                    </td>
+
+                    <td class="text-center">
+                        <a th:href="@{|/admin/users/edit/${user.id}|}" class="btn btn-sm btn-info">Edit Role</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${users.isEmpty()}" class="alert alert-warning text-center mt-4">
+            No users found in the system.
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer"></th:block>

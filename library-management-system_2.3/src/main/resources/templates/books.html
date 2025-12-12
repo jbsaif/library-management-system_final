@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0" th:text="${title}">📖 Library Book Management</h2>
+    </div>
+    <div class="card-body">
+
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <span th:text="${param.error[0]}">An error occurred.</span>
+        </div>
+
+        <div class="row mb-4">
+
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by Category
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/books}">All Books</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/Fiction}">Fiction</a></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/Non-Fiction}">Non-Fiction</a></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/Science}">Science</a></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/History}">History</a></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/Biography}">Biography</a></li>
+                        <li><a class="dropdown-item" th:href="@{/books/category/Fantasy}">Fantasy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <form th:action="@{/books}" method="get" class="d-flex">
+                    <input class="form-control me-2"
+                           type="search"
+                           placeholder="Search by Title, Author, or ISBN..."
+                           name="q"
+                           aria-label="Search"
+                           th:value="${query}"> <button class="btn btn-outline-success" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+                    <a th:if="${query != null and !query.isEmpty()}" th:href="@{/books}" class="btn btn-outline-danger ms-2">Clear</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped border">
+                <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>ISBN</th>
+                    <th class="text-center">Available Copies</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="b : ${books}">
+                    <td th:text="${b.title}">Title Example</td>
+                    <td th:text="${b.author}">Author Example</td>
+                    <td th:text="${b.category}">Category Example</td>
+                    <td th:text="${b.isbn}">ISBN Example</td>
+                    <td th:text="${b.availableCopies}" class="text-center">0</td>
+                    <td class="text-center">
+
+                        <span sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{|/books/edit/${b.id}|}" class="btn btn-sm btn-warning me-2">Edit</a>
+                        </span>
+
+                        <span sec:authorize="hasRole('USER')">
+                            <form th:action="@{|/books/borrow/${b.id}|}" method="post" style="display:inline;">
+                                <button type="submit"
+                                        th:disabled="${b.availableCopies == 0}"
+                                        th:classappend="${b.availableCopies > 0} ? 'btn-success' : 'btn-secondary'"
+                                        class="btn btn-sm me-2">
+                                    <span th:if="${b.availableCopies > 0}">Borrow</span>
+                                    <span th:unless="${b.availableCopies > 0}">Out of Stock</span>
+                                </button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${books.isEmpty()}" class="alert alert-warning text-center mt-4">
+            <span th:if="${query != null and !query.isEmpty()}">No books found matching the search criteria.</span>
+            <span th:unless="${query != null and !query.isEmpty()}">No books are currently in the library system.</span>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer"></th:block>

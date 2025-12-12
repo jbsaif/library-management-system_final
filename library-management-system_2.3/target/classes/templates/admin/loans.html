@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-header bg-danger text-white">
+        <h2 class="mb-0"><i class="bi bi-file-earmark-bar-graph"></i> Active Loans Report (Admin View)</h2>
+    </div>
+    <div class="card-body">
+
+        <div class="alert alert-info" role="alert">
+            Displaying all books currently checked out by users.
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped border">
+                <thead class="table-dark">
+                <tr>
+                    <th>Borrower</th>
+                    <th>Book Title</th>
+                    <th>ISBN</th>
+                    <th>Borrowed On</th>
+                    <th>Due Date</th>
+                    <th>Overdue Days</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="record : ${activeLoans}">
+                    <td th:text="${record.user.fullName} + ' (' + ${record.user.username} + ')'">Full Name (user@example.com)</td>
+
+                    <td th:text="${record.book.title}">Title Example</td>
+                    <td th:text="${record.book.isbn}">ISBN Example</td>
+
+                    <td th:text="${#temporals.format(record.borrowDate, 'dd-MMM-yyyy')}">2025-12-10</td>
+
+                    <td
+                            th:text="${#temporals.format(record.dueDate, 'dd-MMM-yyyy')}"
+
+                            th:classappend="${today.isAfter(record.dueDate)} ? 'text-danger fw-bold' : ''">
+                        2025-12-24
+                    </td>
+
+                    <td
+                            th:with="daysOverdue=${today.isAfter(record.dueDate) ? #temporals.daysBetween(record.dueDate, today) : 0}"
+                            th:text="${daysOverdue > 0 ? daysOverdue : 'N/A'}"
+                            th:classappend="${daysOverdue > 0} ? 'text-danger fw-bold' : ''">
+                        0
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${activeLoans.isEmpty()}" class="alert alert-success text-center mt-4">
+            No books are currently checked out! The library is clear.
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer"></th:block>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-header bg-info text-white">
+        <h2 class="mb-0"><i class="bi bi-person-check-fill"></i> My Borrowed Books</h2>
+    </div>
+    <div class="card-body">
+
+        <div th:if="${param.success}" class="alert alert-success" role="alert">
+            <span th:if="${param.success[0] == 'returned'}">Book successfully returned!</span>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <span th:text="${param.error}">An error occurred.</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped border">
+                <thead class="table-dark">
+                <tr>
+                    <th>Book Title</th>
+                    <th>ISBN</th>
+                    <th>Author</th>
+                    <th>Borrowed On</th>
+                    <th>Due Date</th>
+                    <th>Fine</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="record : ${borrowRecords}">
+                    <td th:text="${record.book.title}">Title Example</td>
+                    <td th:text="${record.book.isbn}">ISBN Example</td>
+                    <td th:text="${record.book.author}">Author Example</td>
+
+                    <td th:text="${#temporals.format(record.borrowDate, 'dd-MMM-yyyy')}">2025-12-10</td>
+
+                    <td
+                            th:text="${#temporals.format(record.dueDate, 'dd-MMM-yyyy')}"
+
+                            th:classappend="${T(java.time.LocalDate).now().isAfter(record.dueDate) and record.returnDate == null} ? 'text-danger fw-bold' : ''">
+                        2025-12-24
+                    </td>
+
+                    <td th:text="${#numbers.formatCurrency(record.fineAmount)}">
+                        $0.00
+                    </td>
+
+                    <td class="text-center">
+                        <span th:if="${record.returnDate == null}">
+                            <form th:action="@{|/return/${record.id}|}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Return Book
+                                </button>
+                            </form>
+                            <span th:if="${T(java.time.LocalDate).now().isAfter(record.dueDate)}"
+                                  class="ms-2 badge bg-danger">OVERDUE</span>
+                        </span>
+
+                        <span th:unless="${record.returnDate == null}" class="badge bg-success">
+                            Returned
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${borrowRecords.isEmpty()}" class="alert alert-info text-center mt-4">
+            You currently have no books checked out or records found.
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer"></th:block>

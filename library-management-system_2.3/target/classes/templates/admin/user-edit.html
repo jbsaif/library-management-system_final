@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header bg-info text-white">
+                <h2 class="mb-0">🔑 Editing User Role: <span th:text="${user.username}"></span></h2>
+            </div>
+            <div class="card-body">
+
+                <form th:action="@{/admin/users/edit}" th:object="${user}" method="post">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" id="fullName" th:value="*{fullName}" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" th:value="*{username}" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="role" class="form-label fw-bold">Select New Role</label>
+                        <select id="role" th:field="*{role}" class="form-select" required>
+                            <option value="ROLE_USER">ROLE_USER (Standard Borrower)</option>
+                            <option value="ROLE_ADMIN">ROLE_ADMIN (System Administrator)</option>
+                        </select>
+                        <div class="form-text">Changing the role grants or revokes administrative access.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success me-2">Update Role</button>
+                    <a th:href="@{/admin/users}" class="btn btn-secondary">Cancel</a>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments :: footer"></th:block>

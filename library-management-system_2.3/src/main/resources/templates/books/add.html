@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments :: header"></th:block>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-header bg-success text-white">
+        <h2 class="mb-0">➕ Add New Book</h2>
+    </div>
+    <div class="card-body">
+
+        <form th:action="@{/books/add}" th:object="${book}" method="post">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" th:field="*{title}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" id="author" th:field="*{author}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" th:field="*{category}" class="form-select" required>
+                    <option value="">Select Category</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Science">Science</option>
+                    <option value="History">History</option>
+                    <option value="Biography">Biography</option>
+                    <option value="Fantasy">Fantasy</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input type="text" id="isbn" th:field="*{isbn}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="totalCopies" class="form-label">Total Copies</label>
+                <input type="number" id="totalCopies" th:field="*{totalCopies}" class="form-control" required min="1">
+            </div>
+
+            <button type="submit" class="btn btn-success me-2">Save Book</button>
+            <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
