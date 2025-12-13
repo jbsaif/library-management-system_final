@@ -53,8 +53,7 @@ The application will be accessible at `http://localhost:8081`.
 | `GET` | `/api/books` | Retrieve a list of all books. |
 | `POST` | `/api/books` | Create a new book record. |
 | `GET` | `/api/books/{id}` | Retrieve a single book by ID. |
-| `PUT` | `/api/patrons/{id}` | Update an existing patron's details. |
-| `POST` | `/api/borrow/{bookId}/{patronId}` | Record a book borrowing transaction. |
+| `POST` | `/api/borrow/{bookId}/{BorrwerId}` | Record a book borrowing transaction. |
 
 ## 🎓 University Project Details
 
