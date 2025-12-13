@@ -58,7 +58,7 @@ The application will be accessible at `http://localhost:8081`.
 ## 🎓 University Project Details
 
 * **Course:** Object Oriented Programming
-* **Semester/Year:** Semester 1, Year 2
+* **Semester/Year:** Level 2 Term 1
 * **Student Name:** Junaeed Bin Saif
 * **Student ID:** 242-15-475
 
